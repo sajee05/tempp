@@ -1,8 +1,12 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Metis Roadmap</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+html{color-scheme:light}body{margin:0}
 /* Layout: one reading column. Summary and checklist first, then phase details in tabs. */
 :root{
   --bg:#F4F5F7; --surface:#FFFFFF; --fg:#151A2D; --muted:#566074; --line:#D8DCE5;
@@ -104,6 +108,8 @@ button{font:inherit; color:inherit; cursor:pointer}
 @media (prefers-reduced-motion:reduce){ .bar > i{transition:none} }
 </style>
 
+</head>
+<body>
 <div class="wrap" id="app">
   <header>
     <div class="label">Product roadmap</div>
@@ -145,6 +151,7 @@ button{font:inherit; color:inherit; cursor:pointer}
       <button type="button" role="tab" id="tab-t3" aria-controls="t3" aria-selected="false" tabindex="-1">3 Test and print</button>
       <button type="button" role="tab" id="tab-t4" aria-controls="t4" aria-selected="false" tabindex="-1">4 Motivation</button>
       <button type="button" role="tab" id="tab-t5" aria-controls="t5" aria-selected="false" tabindex="-1">Decisions</button>
+      <button type="button" role="tab" id="tab-t6" aria-controls="t6" aria-selected="false" tabindex="-1">Bug fix</button>
     </div>
 
     <div role="tabpanel" id="t1" aria-labelledby="tab-t1">
@@ -332,12 +339,49 @@ button{font:inherit; color:inherit; cursor:pointer}
         </div>
       </div>
     </div>
+
+    <div role="tabpanel" id="t6" aria-labelledby="tab-t6" hidden>
+      <p class="panel-intro">Fix the scroll jump on iOS first. It affects every long question on the live site.</p>
+      <div class="tags"><span class="tag warn">Bug</span><span class="tag">Live site</span></div>
+      <div class="groups">
+        <div class="group">
+          <h3>The bug</h3>
+          <ul>
+            <li>On iOS, a tall question can sit with its top half off screen.</li>
+            <li>Tapping an option in that state makes the page jump.</li>
+            <li>The jump breaks the reading flow.</li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Things to check</h3>
+          <ul>
+            <li>Focus moving to the tapped option can scroll the page.</li>
+            <li>Re-rendering the question card can reset the scroll position.</li>
+            <li>Content added above the viewport, such as the explanation, can shift the layout.</li>
+            <li>iOS Safari handles scroll anchoring differently from other browsers.</li>
+          </ul>
+        </div>
+        <div class="group wide">
+          <h3>Done when</h3>
+          <ul>
+            <li>Tapping any option leaves the scroll position unchanged.</li>
+            <li>Tested on iOS Safari, iOS Brave and a low-end Android phone.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
 <script>
 (function(){
   var PHASES = [
+    {tag:"Bug fix", title:"Fix on the live site", tab:"t6", note:"Independent of the phases", items:[
+      ["f1","Reproduce on iOS Safari: tall question, top half off screen, tap an option"],
+      ["f2","Find the cause of the jump: focus scroll, re-render or layout shift"],
+      ["f3","Fix it so tapping an option keeps the scroll position"],
+      ["f4","Retest on iOS Safari, iOS Brave and a low-end Android phone"]
+    ]},
     {tag:"Phase 1", title:"Sign-in foundation", tab:"t1", note:"", items:[
       ["a1","Add Google sign-in with name, email and photo only"],
       ["a2","Test sign-in on Brave"],
@@ -529,7 +573,7 @@ button{font:inherit; color:inherit; cursor:pointer}
   }
 
   /* ---------- tabs ---------- */
-  var tabIds = ["t1","t2","t3","t4","t5"];
+  var tabIds = ["t1","t2","t3","t4","t5","t6"];
   function selectTab(id, scroll){
     tabIds.forEach(function(t){
       var on = t === id;
@@ -578,4 +622,5 @@ button{font:inherit; color:inherit; cursor:pointer}
 })();
 </script>
 
-</body></html>
+</body>
+</html>
